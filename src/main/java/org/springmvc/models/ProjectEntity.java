@@ -32,4 +32,32 @@ public class ProjectEntity {
 		this.proj_Name = proj_Name;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + proj_Id;
+		result = prime * result + ((proj_Name == null) ? 0 : proj_Name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProjectEntity other = (ProjectEntity) obj;
+		if (proj_Id != other.proj_Id)
+			return false;
+		if (proj_Name == null) {
+			if (other.proj_Name != null)
+				return false;
+		} else if (!proj_Name.equals(other.proj_Name))
+			return false;
+		return true;
+	}
+
 }

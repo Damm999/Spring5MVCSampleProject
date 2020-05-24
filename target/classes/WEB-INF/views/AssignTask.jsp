@@ -151,7 +151,7 @@
 				$
 						.ajax({
 							type : "GET",
-							url : 'http://localhost:8081/TaskMng/api/assign/getEmployee?pojectOrTaskId='
+							url : 'http://localhost:8081/TaskMng/api/assign/getEmployee?projectID='
 									+ elementIdIndex,
 							data : ({}),
 							dataType : 'json',

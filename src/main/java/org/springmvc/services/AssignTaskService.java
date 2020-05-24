@@ -10,7 +10,7 @@ public interface AssignTaskService {
 
 	public List<String> getEmployee(String pojectOrTaskId);
 	
-	public List<String> getEmployeeIDs(String projectID);
+	public List<String> getEmployeesForProject(String projectID);
 
 	public boolean addATask(EmployeeEntity employeeEntity);
 

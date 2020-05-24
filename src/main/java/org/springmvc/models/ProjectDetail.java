@@ -41,5 +41,42 @@ public class ProjectDetail {
 		this.projects = projects;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((employee_list == null) ? 0 : employee_list.hashCode());
+		result = prime * result + ((projects == null) ? 0 : projects.hashCode());
+		result = prime * result + ((task_list == null) ? 0 : task_list.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProjectDetail other = (ProjectDetail) obj;
+		if (employee_list == null) {
+			if (other.employee_list != null)
+				return false;
+		} else if (!employee_list.equals(other.employee_list))
+			return false;
+		if (projects == null) {
+			if (other.projects != null)
+				return false;
+		} else if (!projects.equals(other.projects))
+			return false;
+		if (task_list == null) {
+			if (other.task_list != null)
+				return false;
+		} else if (!task_list.equals(other.task_list))
+			return false;
+		return true;
+	}
+
 
 }

@@ -19,9 +19,9 @@ public class AssignTaskRestController {
 
 	
 	@RequestMapping(value="/getEmployee", method=RequestMethod.GET)
-	public List<String> getListOfEmployees(@RequestParam String pojectOrTaskId) {
-		List<String> projects = assignTaskService.getEmployee(pojectOrTaskId);
-		List<String> Id =  assignTaskService.getEmployeeIDs(pojectOrTaskId);
+	public List<String> getListOfEmployees(@RequestParam String projectID) {
+		List<String> projects = assignTaskService.getEmployee(projectID);
+		List<String> Id =  assignTaskService.getEmployeesForProject(projectID);
 		List<String> data = new ArrayList<>();
 		for (int i=0;i<projects.size();i++) {
 			data.add(projects.get(i)+ " "+Id.get(i) );

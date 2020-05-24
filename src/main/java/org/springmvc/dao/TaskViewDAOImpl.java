@@ -16,19 +16,32 @@ public class TaskViewDAOImpl extends AbstractDao<Integer, TasksEntity> implement
 	Logger log = Logger.getLogger(TaskViewDAOImpl.class);
 	
 
+	/* 
+	 * Method to get All Task created for different projects
+	 */
 	@Override
 	public List<TasksEntity> getAllTasks() {
 		log.info("Getting all the tasks..");
 		List<TasksEntity> tasksEntities = new ArrayList<>();
+		
+		try {
 		Query<TasksEntity> query = getSession().createQuery("From TasksEntity", TasksEntity.class);
 		tasksEntities = query.getResultList();
+		}catch (Exception e) {
+			log.error("Exception occured while geting all tasks: "+e.getMessage());
+		}
 
 		return tasksEntities;
 	}
 
+	/* 
+	 * Method to get List of All Employees based on Task id for every proeject 
+	 */
 	@Override
 	public HashMap<Integer, ?> getTaskedEmployees(List<TasksEntity> tasksEntities) {
 		log.info("Getting empolyees assigned to task for every project...");
+		HashMap<Integer, ArrayList<EmployeeEntity>> employees = new HashMap<>();
+		try {
 		
 		int count = ((Long) getSession().createQuery("select count(*) from EmployeeEntity").uniqueResult()).intValue();
 		getSession().getTransaction().commit();
@@ -40,7 +53,7 @@ public class TaskViewDAOImpl extends AbstractDao<Integer, TasksEntity> implement
 		
 		getSession().getTransaction().commit();
 
-		HashMap<Integer, ArrayList<EmployeeEntity>> employees = new HashMap<>();
+	
 
 		for (int i = 0; i < tasksEntities.size(); i++) {
 			int j = 0;
@@ -63,16 +76,23 @@ public class TaskViewDAOImpl extends AbstractDao<Integer, TasksEntity> implement
 			employees.put(id, emp);
 		}
 		getSession().beginTransaction();
-
+		}catch (Exception e) {
+			log.error("Exception Occured while getting employees who has taks assigned: "+e.getMessage());
+		}
 		return employees;
 	}
 
+	/* (non-Javadoc)
+	 * Method to get employees list based on task id.
+	 */
 	@Override
 	public List<EmployeeEntity> getTaskedEmployees(int taskId) {
 
 		log.info("Getting employees based on task...");
+		List<EmployeeEntity> employeeEntites = new ArrayList<>();
+		try {
 		Query<EmployeeEntity> query1 = getSession().createQuery("From EmployeeEntity where task_id=:id", EmployeeEntity.class).setParameter("id", String.valueOf(taskId));
-		List<EmployeeEntity> employeeEntites = query1.getResultList();
+		employeeEntites = query1.getResultList();
 		
 		getSession().getTransaction().commit();
 
@@ -80,18 +100,28 @@ public class TaskViewDAOImpl extends AbstractDao<Integer, TasksEntity> implement
 
 		
 		getSession().beginTransaction();
+		}catch (Exception e) {
+			log.error("Exception occured while getting list of employees who has task: "+taskId+" due to: "+e.getMessage());
+		}
 
 		return employeeEntites;
 	
 	}
 
+	/* 
+	 * Method to get list of task for a particular project
+	 */
 	@Override
 	public List<TasksEntity> getTask(int projId) {
 		log.info("Getting taks for prjects....");
 		List<TasksEntity> tasksEntities = new ArrayList<>();
+		try {
 		Query<TasksEntity> query = getSession().createQuery("From TasksEntity where proj_id= :pId", TasksEntity.class);
 		query.setParameter("pId", projId);
 		tasksEntities = query.getResultList();
+		}catch (Exception e) {
+			log.error("Exception occured while getting list of task assigned for prohectID: "+projId+" due to: "+e.getMessage());
+		}
 
 		return tasksEntities;
 	}

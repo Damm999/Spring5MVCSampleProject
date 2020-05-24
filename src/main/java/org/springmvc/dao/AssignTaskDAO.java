@@ -2,7 +2,6 @@ package org.springmvc.dao;
 
 import java.util.List;
 
-import org.springmvc.models.AssignTaskEntity;
 import org.springmvc.models.EmployeeEntity;
 
 public interface AssignTaskDAO {
@@ -19,5 +18,5 @@ public interface AssignTaskDAO {
 	
 	public String getEmployeeId(String employeeName);
 
-	public List<String> getEmployeeIDs(String projectID);
+	public List<String> getEmployeesForProject(String projectID);
 }

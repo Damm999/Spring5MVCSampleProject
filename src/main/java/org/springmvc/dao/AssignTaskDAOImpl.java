@@ -14,6 +14,9 @@ public class AssignTaskDAOImpl extends AbstractDao<Integer, EmployeeEntity> impl
 
 	Logger log = Logger.getLogger(AssignTaskDAOImpl.class);
 
+	/* 
+	 * Method to retrieve project Id for a project
+	 */
 	@Override
 	public int getProjectId(String projectName) {
 
@@ -30,6 +33,9 @@ public class AssignTaskDAOImpl extends AbstractDao<Integer, EmployeeEntity> impl
 		return projId;
 	}
 
+	/* 
+	 * Method to get Employees for a particular project.
+	 */
 	@Override
 	public List<String> getEmployee(String pojectOrTaskId) {
 		log.info("Getting list of employees for project id: " + pojectOrTaskId);
@@ -46,7 +52,9 @@ public class AssignTaskDAOImpl extends AbstractDao<Integer, EmployeeEntity> impl
 		return listOfEmployees;
 	}
 
-
+	/* 
+	 * Method to add a task for an employee
+	 */
 	@Override
 	public boolean addATask(EmployeeEntity employeeEntity) {
 		log.info("Adding Task " + employeeEntity);
@@ -63,71 +71,105 @@ public class AssignTaskDAOImpl extends AbstractDao<Integer, EmployeeEntity> impl
 			String[] employees = new String[employeeEntity.getEmployees().length];
 			int i = 0;
 			for (String s : employeeEntity.getEmployees()) {
-				employees[i] = s.substring(s.lastIndexOf(" ")+1);
+				employees[i] = s.substring(s.lastIndexOf(" ") + 1);
 				i++;
 			}
 
 			getSession().save(tskEntity);
-			
-			System.out.println("Task Id generated: "+tskEntity.getTask_id());
-			Query<?> query = getSession().createQuery("update EmployeeEntity set Task_ID=:tskId  where emp_id in :employee");
+
+			System.out.println("Task Id generated: " + tskEntity.getTask_id());
+			Query<?> query = getSession()
+					.createQuery("update EmployeeEntity set Task_ID=:tskId  where emp_id in :employee");
 			query.setParameter("tskId", tskEntity.getTask_id());
 			query.setParameterList("employee", employees);
-		
-			int result  = query.executeUpdate();
+
+			int result = query.executeUpdate();
 			System.out.println("Rows affected: " + result);
-			
+
 			isSuccessfull = true;
 
 		} catch (Exception e) {
 			log.error("Exception occured while adding a task: " + e.getCause());
 			log.error(e.getMessage());
-			System.out.println("Exception occured in  add a task methdo due to: "+e.getMessage());
+			System.out.println("Exception occured in  add a task methdo due to: " + e.getMessage());
 			isSuccessfull = false;
 		}
 
 		return isSuccessfull;
 	}
 
+	/* 
+	 * Method to get all the projects.
+	 */
 	@Override
 	public List<String> getProjects() {
-		log.info("Getting all the projects....");
-		List<String> acc = new ArrayList<>();
-		Query<String> query = getSession().createQuery("select proj_Name from ProjectEntity", String.class);
-		acc = query.getResultList();
 
+		log.info("Getting all the projects....");
+
+		List<String> acc = new ArrayList<>();
+		try {
+			Query<String> query = getSession().createQuery("select proj_Name from ProjectEntity", String.class);
+			acc = query.getResultList();
+		} catch (Exception e) {
+			log.error("Exception occured in getting projects due to : " + e.getMessage());
+		}
 		return acc;
 	}
 
+	/* 
+	 * Method to get Task id based on task description
+	 */
 	@Override
 	public String getTaskId(String taskdescription) {
 		log.info("Getting taskId .......");
-		Query<Integer> query = getSession().createQuery("select task_id from TasksEntity where description=:desc",
-				Integer.class);
-		query.setParameter("desc", taskdescription);
+		Query<Integer> query = null;
+		try {
+			query = getSession().createQuery("select task_id from TasksEntity where description=:desc", Integer.class);
+			query.setParameter("desc", taskdescription);
+		} catch (Exception e) {
+			log.error("Exception occured in getting task Id for the project: " + e.getMessage());
+		}
 
 		return String.valueOf(query.getSingleResult());
 
 	}
 
+	/* 
+	 * Method to get Employee Id based on Employee Name.
+	 */
 	@Override
 	public String getEmployeeId(String employeeName) {
 		log.info("Getting employee id ....");
-		Query<String> query2 = getSession().createQuery("Select emp_id From EmployeeEntity where emp_name=:employee",
-				String.class);
-		query2.setParameter("employee", employeeName);
-		System.out.println(query2.getSingleResult());
+		Query<String> query2 = null;
+		try {
+			query2 = getSession().createQuery("Select emp_id From EmployeeEntity where emp_name=:employee",
+					String.class);
+			query2.setParameter("employee", employeeName);
+			System.out.println(query2.getSingleResult());
+		} catch (Exception e) {
+
+			log.error("Exceoption occured in gettig employee id for employee:" + employeeName + " due to: "
+					+ e.getMessage());
+		}
 		return query2.getSingleResult();
 	}
 
+	/*
+	 * Method to get all the employees based on project id
+	 */
 	@Override
-	public List<String> getEmployeeIDs(String projectID) {
+	public List<String> getEmployeesForProject(String projectID) {
+
 		log.info("Getting employees based on project...");
 		List<String> listOfEmployees = new ArrayList<>();
-		Query<String> query = getSession().createQuery(
-				"select emp_id from EmployeeEntity where Proj_ID=:pojectId and task_id=null ", String.class);
-		query.setParameter("pojectId", projectID);
-		listOfEmployees = query.getResultList();
+		try {
+			Query<String> query = getSession().createQuery(
+					"select emp_id from EmployeeEntity where Proj_ID=:pojectId and task_id=null ", String.class);
+			query.setParameter("pojectId", projectID);
+			listOfEmployees = query.getResultList();
+		} catch (Exception e) {
+			log.error("Exception occured while retriving employee Id for project: " + projectID);
+		}
 		return listOfEmployees;
 	}
 

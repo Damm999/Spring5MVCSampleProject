@@ -1,5 +1,7 @@
 package org.springmvc.models;
 
+import java.util.Arrays;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,9 +14,10 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.Valid;
 
+
 @Entity
 @Table(name = "employee")
-public class EmployeeEntity {
+public class EmployeeEntity implements Comparable<EmployeeEntity> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -89,18 +92,66 @@ public class EmployeeEntity {
 		this.projectEntity = projectEntity;
 	}
 
-	/*public int getProj_id() {
-		return proj_id;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((emp_id == null) ? 0 : emp_id.hashCode());
+		result = prime * result + ((emp_name == null) ? 0 : emp_name.hashCode());
+		result = prime * result + Arrays.hashCode(employees);
+		result = prime * result + id;
+		result = prime * result + ((projectEntity == null) ? 0 : projectEntity.hashCode());
+		result = prime * result + projectName;
+		result = prime * result + ((taskEntity == null) ? 0 : taskEntity.hashCode());
+		return result;
 	}
 
-	public void setProj_id(int proj_id) {
-		this.proj_id = proj_id;
-	}*/
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EmployeeEntity other = (EmployeeEntity) obj;
+		if (emp_id == null) {
+			if (other.emp_id != null)
+				return false;
+		} else if (!emp_id.equals(other.emp_id))
+			return false;
+		if (emp_name == null) {
+			if (other.emp_name != null)
+				return false;
+		} else if (!emp_name.equals(other.emp_name))
+			return false;
+		if (!Arrays.equals(employees, other.employees))
+			return false;
+		if (id != other.id)
+			return false;
+		if (projectEntity == null) {
+			if (other.projectEntity != null)
+				return false;
+		} else if (!projectEntity.equals(other.projectEntity))
+			return false;
+		if (projectName != other.projectName)
+			return false;
+		if (taskEntity == null) {
+			if (other.taskEntity != null)
+				return false;
+		} else if (!taskEntity.equals(other.taskEntity))
+			return false;
+		return true;
+	}
 
-	/*
-	 * public String getTask_id() { return task_id; }
-	 * 
-	 * public void setTask_id(String task_id) { this.task_id = task_id; }
-	 */
+	@Override
+	public int compareTo(EmployeeEntity o) {
+		if(getEmp_name().equals(o.getEmp_name()))
+			return 0;
+		else if (!getEmp_name().equals(o.getEmp_name()))
+			return 1;
+		return id;
+	}
+
 
 }

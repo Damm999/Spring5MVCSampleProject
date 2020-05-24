@@ -49,8 +49,8 @@ public class AssignTaskServiceImpl implements AssignTaskService {
 	}
 
 	@Override
-	public List<String> getEmployeeIDs(String projectID) {
-		return assignTaskDAO.getEmployeeIDs(projectID);
+	public List<String> getEmployeesForProject(String projectID) {
+		return assignTaskDAO.getEmployeesForProject(projectID);
 	}
 	
 	
